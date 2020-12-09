@@ -117,12 +117,15 @@ int main(int argc, char *argv[]) {
     // a list of the buttons
     vector<TheButton*> buttons;
     // the buttons are arranged horizontally
-    QHBoxLayout *layout = new QHBoxLayout();
+    QVBoxLayout *layout = new QVBoxLayout();
+
+    layout->setAlignment(Qt::AlignTop);
+
     buttonWidget->setLayout(layout);
 
 
     // create the four buttons
-    for ( int i = 0; i < 4; i++ ) {
+    for (int i = 0; i < videos.size(); i++) {
         TheButton *button = new TheButton(buttonWidget);
         button->connect(button, SIGNAL(jumpTo(TheButtonInfo* )), player, SLOT (jumpTo(TheButtonInfo* ))); // when clicked, tell the player to play.
         buttons.push_back(button);
@@ -135,7 +138,7 @@ int main(int argc, char *argv[]) {
 
     // create the main window and layout
     QWidget window;
-    QVBoxLayout *top = new QVBoxLayout();
+    QHBoxLayout *top = new QHBoxLayout();
     window.setLayout(top);
     window.setWindowTitle("tomeo");
     window.setMinimumSize(800, 680);
