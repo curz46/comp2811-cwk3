@@ -8,6 +8,8 @@
 
 #include <QApplication>
 #include <QMediaPlayer>
+#include <QtWidgets/QLabel>
+
 #include "the_button.h"
 #include <vector>
 #include <QTimer>
@@ -24,6 +26,8 @@ private:
     QTimer* mTimer;
     long updateCount = 0;
 
+    TheButtonInfo *currentInfo;
+    QLabel *label;
 public:
     ThePlayer() : QMediaPlayer(NULL) {
         setVolume(0); // be slightly less annoying
@@ -34,6 +38,8 @@ public:
         // mTimer->start();
         // connect( mTimer, SIGNAL (timeout()), SLOT ( shuffle() ) ); // ...running shuffle method
     }
+
+    void setVideoLabel(QLabel *label);
 
     // all buttons have been setup, store pointers here
     void setContent(vector<TheButton*>* b, vector<TheButtonInfo>* i);

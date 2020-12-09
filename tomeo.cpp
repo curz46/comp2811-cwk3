@@ -19,6 +19,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QScrollArea>
+#include <QtWidgets/QLabel>
 #include <QtCore/QFileInfo>
 #include <QtWidgets/QFileIconProvider>
 #include <QDesktopServices>
@@ -29,20 +30,16 @@
 #include "the_player.h"
 #include "the_button.h"
 
-
 using namespace std;
 
 // read in videos and thumbnails to this directory
 vector<TheButtonInfo> getInfoIn (string loc) {
-
     vector<TheButtonInfo> out =  vector<TheButtonInfo>();
     QDir dir(QString::fromStdString(loc) );
     QDirIterator it(dir);
 
     while (it.hasNext()) { // for all files
-
         QString f = it.next();
-
             if (f.contains("."))
 
 #if defined(_WIN32)
@@ -51,14 +48,15 @@ vector<TheButtonInfo> getInfoIn (string loc) {
             if (f.contains(".mp4") || f.contains("MOV"))  { // mac/linux
 #endif
 
-            QString thumb = f.left( f .length() - 4) +".png";
+            QString title = f.left( f .length() - 4);
+            QString thumb = title + ".png";
             if (QFile(thumb).exists()) { // if a png thumbnail exists
                 QImageReader *imageReader = new QImageReader(thumb);
                     QImage sprite = imageReader->read(); // read the thumbnail
                     if (!sprite.isNull()) {
                         QIcon* ico = new QIcon(QPixmap::fromImage(sprite)); // voodoo to create an icon for the button
                         QUrl* url = new QUrl(QUrl::fromLocalFile( f )); // convert the file location to a generic url
-                        out . push_back(TheButtonInfo( url , ico  ) ); // add to the output list
+                        out . push_back(TheButtonInfo( title, url , ico  ) ); // add to the output list
                     }
                     else
                         qDebug() << "warning: skipping video because I couldn't process thumbnail " << thumb << endl;
@@ -107,11 +105,19 @@ int main(int argc, char *argv[]) {
     }
 
     // the widget that will show the video
+    QWidget *videoContainer = new QWidget();
+    QVBoxLayout *videoLayout = new QVBoxLayout();
+    QLabel *videoLabel = new QLabel();
+    videoLabel->setText("hello world");
     QVideoWidget *videoWidget = new QVideoWidget;
+    videoLayout->addWidget(videoLabel);
+    videoLayout->addWidget(videoWidget);
+    videoContainer->setLayout(videoLayout);
 
     // the QMediaPlayer which controls the playback
     ThePlayer *player = new ThePlayer;
     player->setVideoOutput(videoWidget);
+    player->setVideoLabel(videoLabel);
 
     // a row of buttons
     QScrollArea *area = new QScrollArea();
@@ -151,7 +157,7 @@ int main(int argc, char *argv[]) {
     window.setMinimumSize(800, 680);
 
     // add the video and the buttons to the top level widget
-    top->addWidget(videoWidget);
+    top->addWidget(videoContainer);
     top->addWidget(area);
 
     // showtime!

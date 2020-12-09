@@ -5,18 +5,20 @@
 #ifndef CW2_THE_BUTTON_H
 #define CW2_THE_BUTTON_H
 
-
 #include <QPushButton>
 #include <QUrl>
-
 
 class TheButtonInfo {
 
 public:
+    QString* title;
     QUrl* url; // video file to play
     QIcon* icon; // icon to display
 
-    TheButtonInfo ( QUrl* url, QIcon* icon) : url (url), icon (icon) {}
+    TheButtonInfo ( QString &title, QUrl* url, QIcon* icon) : url (url), icon (icon) {
+        this->title = new QString();
+        this->title->append(title);
+    }
 };
 
 class TheButton : public QPushButton {
