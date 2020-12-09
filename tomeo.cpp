@@ -18,6 +18,7 @@
 #include <vector>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QScrollArea>
 #include <QtCore/QFileInfo>
 #include <QtWidgets/QFileIconProvider>
 #include <QDesktopServices>
@@ -113,16 +114,22 @@ int main(int argc, char *argv[]) {
     player->setVideoOutput(videoWidget);
 
     // a row of buttons
+    QScrollArea *area = new QScrollArea();
+    area->setMinimumSize(200 + 60, 0);
+    area->setMaximumSize(200 + 60, QWIDGETSIZE_MAX);
+    area->setWidgetResizable(true);
+    area->setFrameStyle(QFrame::NoFrame);
+    area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
     QWidget *buttonWidget = new QWidget();
     // a list of the buttons
     vector<TheButton*> buttons;
-    // the buttons are arranged horizontally
+    // the buttons are arranged vertically 
     QVBoxLayout *layout = new QVBoxLayout();
-
     layout->setAlignment(Qt::AlignTop);
 
     buttonWidget->setLayout(layout);
-
+    area->setWidget(buttonWidget);
 
     // create the four buttons
     for (int i = 0; i < videos.size(); i++) {
@@ -145,7 +152,7 @@ int main(int argc, char *argv[]) {
 
     // add the video and the buttons to the top level widget
     top->addWidget(videoWidget);
-    top->addWidget(buttonWidget);
+    top->addWidget(area);
 
     // showtime!
     window.show();

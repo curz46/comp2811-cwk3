@@ -8,7 +8,7 @@ pacman -Syyu qt5-base
 pacman -Syyu gstreamer gst-libav gst-plugins-good gst-plugins-ugly
 ```
 
-Now download the videos.zip file from https://leeds365-my.sharepoint.com/personal/scstke_leeds_ac_uk/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fscstke%5Fleeds%5Fac%5Fuk%2FDocuments%2Fcomp2811%5F2020%5Ffiles%2Fvideos%2Ezip&parent=%2Fpersonal%2Fscstke%5Fleeds%5Fac%5Fuk%2FDocuments%2Fcomp2811%5F2020%5Ffiles&originalPath=aHR0cHM6Ly9sZWVkczM2NS1teS5zaGFyZXBvaW50LmNvbS86dTovZy9wZXJzb25hbC9zY3N0a2VfbGVlZHNfYWNfdWsvRWNHbnRjTC1LM0pPaWFaRjRUX3VhQTRCSG42VVNicTJFNTVrRl9CVGZkcFBhZz9ydGltZT14djctUVF1WjJFZw and extract it into `videos` in the root of this project.
+Now download the videos.zip file from https://leeds365-my.sharepoint.com/:u:/g/personal/scstke_leeds_ac_uk/EcGntcL-K3JOiaZF4T_uaA4BHn6USbq2E55kF_BTfdpPag?e=n1quN  and extract it into `videos` in the root of this project.
 
 ## Build & execute instructions
 
