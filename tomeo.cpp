@@ -27,14 +27,15 @@
 #include <QMessageBox>
 #include <QtCore/QDir>
 #include <QtCore/QDirIterator>
-#include "the_player.h"
-#include "the_button.h"
+
+#include "player.h"
+#include "thumbnail.h"
 
 using namespace std;
 
 // read in videos and thumbnails to this directory
-vector<TheButtonInfo> getInfoIn (string loc) {
-    vector<TheButtonInfo> out =  vector<TheButtonInfo>();
+vector<VideoInfo> getInfoIn (string loc) {
+    vector<VideoInfo> out =  vector<VideoInfo>();
     QDir dir(QString::fromStdString(loc) );
     QDirIterator it(dir);
 
@@ -56,7 +57,7 @@ vector<TheButtonInfo> getInfoIn (string loc) {
                     if (!sprite.isNull()) {
                         QIcon* ico = new QIcon(QPixmap::fromImage(sprite)); // voodoo to create an icon for the button
                         QUrl* url = new QUrl(QUrl::fromLocalFile( f )); // convert the file location to a generic url
-                        out . push_back(TheButtonInfo( title, url , ico  ) ); // add to the output list
+                        out . push_back(VideoInfo( title, url , ico  ) ); // add to the output list
                     }
                     else
                         qDebug() << "warning: skipping video because I couldn't process thumbnail " << thumb << endl;
@@ -79,7 +80,7 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
     // collect all the videos in the folder
-    vector<TheButtonInfo> videos;
+    vector<VideoInfo> videos;
 
     if (argc == 2)
         videos = getInfoIn( string(argv[1]) );
@@ -115,7 +116,7 @@ int main(int argc, char *argv[]) {
     videoContainer->setLayout(videoLayout);
 
     // the QMediaPlayer which controls the playback
-    ThePlayer *player = new ThePlayer;
+    Player *player = new Player;
     player->setVideoOutput(videoWidget);
     player->setVideoLabel(videoLabel);
 
@@ -129,7 +130,7 @@ int main(int argc, char *argv[]) {
 
     QWidget *buttonWidget = new QWidget();
     // a list of the buttons
-    vector<TheButton*> buttons;
+    vector<Thumbnail*> buttons;
     // the buttons are arranged vertically 
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setAlignment(Qt::AlignTop);
@@ -139,8 +140,8 @@ int main(int argc, char *argv[]) {
 
     // create the four buttons
     for (int i = 0; i < videos.size(); i++) {
-        TheButton *button = new TheButton(buttonWidget);
-        button->connect(button, SIGNAL(jumpTo(TheButtonInfo* )), player, SLOT (jumpTo(TheButtonInfo* ))); // when clicked, tell the player to play.
+        Thumbnail *button = new Thumbnail(buttonWidget);
+        button->connect(button, SIGNAL(jumpTo(VideoInfo* )), player, SLOT (jumpTo(VideoInfo* ))); // when clicked, tell the player to play.
         buttons.push_back(button);
         layout->addWidget(button);
         button->init(&videos.at(i));

@@ -10,26 +10,26 @@
 #include <QMediaPlayer>
 #include <QtWidgets/QLabel>
 
-#include "the_button.h"
+#include "thumbnail.h"
 #include <vector>
 #include <QTimer>
 
 using namespace std;
 
-class ThePlayer : public QMediaPlayer {
+class Player : public QMediaPlayer {
 
 Q_OBJECT
 
 private:
-    vector<TheButtonInfo>* infos;
-    vector<TheButton*>* buttons;
+    vector<VideoInfo>* infos;
+    vector<Thumbnail*>* buttons;
     QTimer* mTimer;
     long updateCount = 0;
 
-    TheButtonInfo *currentInfo;
+    VideoInfo *currentInfo;
     QLabel *label;
 public:
-    ThePlayer() : QMediaPlayer(NULL) {
+    Player() : QMediaPlayer(NULL) {
         setVolume(0); // be slightly less annoying
         connect (this, SIGNAL (stateChanged(QMediaPlayer::State)), this, SLOT (playStateChanged(QMediaPlayer::State)) );
 
@@ -42,7 +42,7 @@ public:
     void setVideoLabel(QLabel *label);
 
     // all buttons have been setup, store pointers here
-    void setContent(vector<TheButton*>* b, vector<TheButtonInfo>* i);
+    void setContent(vector<Thumbnail*>* b, vector<VideoInfo>* i);
 
 private slots:
 
@@ -54,7 +54,7 @@ private slots:
 public slots:
 
     // start playing this ButtonInfo
-    void jumpTo (TheButtonInfo* button);
+    void jumpTo (VideoInfo* button);
 };
 
 #endif //CW2_THE_PLAYER_H
