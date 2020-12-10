@@ -30,6 +30,7 @@
 
 #include "player.h"
 #include "thumbnail.h"
+#include "add_video.h"
 
 using namespace std;
 
@@ -133,12 +134,17 @@ int main(int argc, char *argv[]) {
     vector<Thumbnail*> buttons;
     // the buttons are arranged vertically 
     QVBoxLayout *layout = new QVBoxLayout();
-    layout->setAlignment(Qt::AlignTop);
 
     buttonWidget->setLayout(layout);
     area->setWidget(buttonWidget);
 
-    // create the four buttons
+    // add the 'add video' button to the top
+    AddVideo *addVideo = new AddVideo(buttonWidget);
+    layout->addWidget(addVideo);
+
+    layout->setAlignment(addVideo, Qt::AlignHCenter);
+
+    // create a thumbnail for each video
     for (int i = 0; i < videos.size(); i++) {
         Thumbnail *button = new Thumbnail(buttonWidget);
         button->connect(button, SIGNAL(jumpTo(VideoInfo* )), player, SLOT (jumpTo(VideoInfo* ))); // when clicked, tell the player to play.

@@ -9,10 +9,12 @@ CONFIG += c++11
 SOURCES += \
         thumbnail.cpp \
         player.cpp \
+        add_video.cpp \
         tomeo.cpp
 
 HEADERS += \
     thumbnail.h \
+    add_video.h \
     player.h
 
 # Default rules for deployment.
