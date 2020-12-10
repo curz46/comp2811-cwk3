@@ -52,19 +52,18 @@ vector<VideoInfo> getInfoIn (string loc) {
 
             QString title = f.left( f .length() - 4);
             QString thumb = title + ".png";
+            QIcon *icon = nullptr;
+
+            // try to find an icon
+            // we can still add the video if there's no thumbnail
             if (QFile(thumb).exists()) { // if a png thumbnail exists
                 QImageReader *imageReader = new QImageReader(thumb);
-                    QImage sprite = imageReader->read(); // read the thumbnail
-                    if (!sprite.isNull()) {
-                        QIcon* ico = new QIcon(QPixmap::fromImage(sprite)); // voodoo to create an icon for the button
-                        QUrl* url = new QUrl(QUrl::fromLocalFile( f )); // convert the file location to a generic url
-                        out . push_back(VideoInfo( title, url , ico  ) ); // add to the output list
-                    }
-                    else
-                        qDebug() << "warning: skipping video because I couldn't process thumbnail " << thumb << endl;
+                QImage sprite = imageReader->read(); // read the thumbnail
+                if (!sprite.isNull())
+                    icon = new QIcon(QPixmap::fromImage(sprite)); // voodoo to create an icon for the button
             }
-            else
-                qDebug() << "warning: skipping video because I couldn't find thumbnail " << thumb << endl;
+            QUrl *url = new QUrl(QUrl::fromLocalFile( f )); // convert the file location to a generic url
+            out.push_back(VideoInfo( title, url , icon )); // add to the output list
         }
     }
 
@@ -81,13 +80,15 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
     // collect all the videos in the folder
+    string videosDir;
     vector<VideoInfo> videos;
 
-    if (argc == 2)
-        videos = getInfoIn( string(argv[1]) );
+    if (argc == 2) {
+        videosDir = string(argv[1]);
+        videos = getInfoIn( videosDir );
+    }
 
     if (videos.size() == 0) {
-
         const int result = QMessageBox::question(
                     NULL,
                     QString("Tomeo"),
@@ -116,8 +117,11 @@ int main(int argc, char *argv[]) {
     videoLayout->addWidget(videoWidget);
     videoContainer->setLayout(videoLayout);
 
+    // the buttons are arranged vertically 
+    QVBoxLayout *layout = new QVBoxLayout();
+
     // the QMediaPlayer which controls the playback
-    Player *player = new Player;
+    Player *player = new Player(layout);
     player->setVideoOutput(videoWidget);
     player->setVideoLabel(videoLabel);
 
@@ -132,24 +136,26 @@ int main(int argc, char *argv[]) {
     QWidget *buttonWidget = new QWidget();
     // a list of the buttons
     vector<Thumbnail*> buttons;
-    // the buttons are arranged vertically 
-    QVBoxLayout *layout = new QVBoxLayout();
 
     buttonWidget->setLayout(layout);
     area->setWidget(buttonWidget);
 
     // add the 'add video' button to the top
-    AddVideo *addVideo = new AddVideo(buttonWidget);
+    AddVideo *addVideo = new AddVideo(buttonWidget, videosDir);
+    addVideo->connect(
+        addVideo, SIGNAL( addVideo(VideoInfo*) ),
+        player, SLOT( addVideo(VideoInfo*) ));
     layout->addWidget(addVideo);
 
     layout->setAlignment(addVideo, Qt::AlignHCenter);
 
     // create a thumbnail for each video
     for (int i = 0; i < videos.size(); i++) {
-        Thumbnail *button = new Thumbnail(buttonWidget);
+        Thumbnail *button = new Thumbnail(buttonWidget, player);
         button->connect(button, SIGNAL(jumpTo(VideoInfo* )), player, SLOT (jumpTo(VideoInfo* ))); // when clicked, tell the player to play.
         buttons.push_back(button);
         layout->addWidget(button);
+        layout->setAlignment(button, Qt::AlignHCenter);
         button->init(&videos.at(i));
     }
 

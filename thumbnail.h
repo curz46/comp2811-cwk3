@@ -8,6 +8,8 @@
 #include <QPushButton>
 #include <QUrl>
 
+#include "player.h"
+
 class VideoInfo {
 
 public:
@@ -27,9 +29,17 @@ class Thumbnail : public QPushButton {
 public:
     VideoInfo* info;
 
-    Thumbnail(QWidget *parent) : QPushButton(parent) {
-        setIconSize(QSize(200,110));
-        connect( this, SIGNAL(released()), this, SLOT (clicked()) ); // if QPushButton clicked...then run clicked() below
+    Thumbnail(QWidget *parent, Player *player) : QPushButton(parent) {
+        QSize size = QSize(200, 110);
+        this->setMinimumSize(size);
+        this->setMaximumSize(size);
+        this->setIconSize(size);
+        this->connect(
+                this, SIGNAL( clicked() ),
+                this, SLOT ( clicked() )); // if QPushButton clicked...then run clicked() below
+        this->connect(
+                this, SIGNAL( jumpTo(VideoInfo*) ),
+                player, SLOT( jumpTo(VideoInfo*) ));
     }
 
     void init(VideoInfo* i);

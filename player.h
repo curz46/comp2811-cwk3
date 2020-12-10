@@ -5,14 +5,16 @@
 #ifndef CW2_THE_PLAYER_H
 #define CW2_THE_PLAYER_H
 
-
 #include <QApplication>
 #include <QMediaPlayer>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
 
-#include "thumbnail.h"
 #include <vector>
 #include <QTimer>
+
+class VideoInfo;
+class Thumbnail;
 
 using namespace std;
 
@@ -23,21 +25,15 @@ Q_OBJECT
 private:
     vector<VideoInfo>* infos;
     vector<Thumbnail*>* buttons;
+    QLayout *buttonLayout;
     QTimer* mTimer;
     long updateCount = 0;
 
     VideoInfo *currentInfo;
     QLabel *label;
 public:
-    Player() : QMediaPlayer(NULL) {
-        setVolume(0); // be slightly less annoying
-        connect (this, SIGNAL (stateChanged(QMediaPlayer::State)), this, SLOT (playStateChanged(QMediaPlayer::State)) );
 
-        // mTimer = new QTimer(NULL);
-        // mTimer->setInterval(1000); // 1000ms is one second between ...
-        // mTimer->start();
-        // connect( mTimer, SIGNAL (timeout()), SLOT ( shuffle() ) ); // ...running shuffle method
-    }
+    Player(QLayout *buttonLayout);
 
     void setVideoLabel(QLabel *label);
 
@@ -54,7 +50,8 @@ private slots:
 public slots:
 
     // start playing this ButtonInfo
-    void jumpTo (VideoInfo* button);
+    void jumpTo (VideoInfo* info);
+    void addVideo (VideoInfo* info);
 };
 
 #endif //CW2_THE_PLAYER_H

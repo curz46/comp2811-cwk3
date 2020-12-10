@@ -6,10 +6,33 @@
 
 #include "player.h"
 
+#include "thumbnail.h"
+
 using namespace std;
+
+Player::Player(QLayout *buttonLayout) : QMediaPlayer(NULL) {
+    this->buttonLayout = buttonLayout;
+
+    setVolume(0); // be slightly less annoying
+    connect (this, SIGNAL (stateChanged(QMediaPlayer::State)), this, SLOT (playStateChanged(QMediaPlayer::State)) );
+
+    // mTimer = new QTimer(NULL);
+    // mTimer->setInterval(1000); // 1000ms is one second between ...
+    // mTimer->start();
+    // connect( mTimer, SIGNAL (timeout()), SLOT ( shuffle() ) ); // ...running shuffle method
+}
 
 void Player::setVideoLabel(QLabel *label) {
     this->label = label;
+}
+
+void Player::addVideo(VideoInfo *info) {
+    Thumbnail *thumbnail = new Thumbnail(nullptr, this);
+    thumbnail->init(info);
+    this->infos->push_back(*info);
+    this->buttons->push_back(thumbnail);
+    this->buttonLayout->addWidget(thumbnail);
+    this->buttonLayout->setAlignment(thumbnail, Qt::AlignHCenter);
 }
 
 // all buttons have been setup, store pointers here
