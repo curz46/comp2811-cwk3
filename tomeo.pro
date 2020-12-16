@@ -9,13 +9,17 @@ CONFIG += c++11
 SOURCES += \
         thumbnail.cpp \
         player.cpp \
+        video_control.cpp \
         add_video.cpp \
-        tomeo.cpp
+        icons.cpp \
+        tomeo.cpp 
 
 HEADERS += \
     thumbnail.h \
+    player.h \
+    video_control.h \
     add_video.h \
-    player.h
+    icons.h
 
 RESOURCES += \
     resources.qrc

@@ -29,6 +29,7 @@
 #include <QtCore/QDirIterator>
 
 #include "player.h"
+#include "video_control.h"
 #include "thumbnail.h"
 #include "add_video.h"
 
@@ -115,6 +116,7 @@ int main(int argc, char *argv[]) {
     QVideoWidget *videoWidget = new QVideoWidget;
     videoLayout->addWidget(videoLabel);
     videoLayout->addWidget(videoWidget);
+
     videoContainer->setLayout(videoLayout);
 
     // the buttons are arranged vertically 
@@ -124,6 +126,10 @@ int main(int argc, char *argv[]) {
     Player *player = new Player(layout);
     player->setVideoOutput(videoWidget);
     player->setVideoLabel(videoLabel);
+
+    // create video control
+    VideoControl *control = new VideoControl(player);
+    videoLayout->addWidget(control);
 
     // a row of buttons
     QScrollArea *area = new QScrollArea();
