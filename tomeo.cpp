@@ -32,6 +32,7 @@
 #include "video_control.h"
 #include "thumbnail.h"
 #include "add_video.h"
+#include "util.h"
 
 using namespace std;
 
@@ -51,8 +52,9 @@ vector<VideoInfo> getInfoIn (string loc) {
             if (f.contains(".mp4") || f.contains("MOV"))  { // mac/linux
 #endif
 
-            QString title = f.left( f .length() - 4);
-            QString thumb = title + ".png";
+            QString filepath = f.left( f .length() - 4);
+            QString title = QString::fromStdString( getFilename(filepath.toStdString()) );
+            QString thumb = filepath + ".png";
             QIcon *icon = nullptr;
 
             // try to find an icon
@@ -157,11 +159,22 @@ int main(int argc, char *argv[]) {
 
     // create a thumbnail for each video
     for (int i = 0; i < videos.size(); i++) {
+        QWidget *wrapper = new QWidget();
+        QVBoxLayout *btnLayout = new QVBoxLayout();
+        
         Thumbnail *button = new Thumbnail(buttonWidget, player);
         button->connect(button, SIGNAL(jumpTo(VideoInfo* )), player, SLOT (jumpTo(VideoInfo* ))); // when clicked, tell the player to play.
         buttons.push_back(button);
-        layout->addWidget(button);
-        layout->setAlignment(button, Qt::AlignHCenter);
+
+        QLabel *label = new QLabel();
+        label->setText(*videos.at(i).title);
+
+        btnLayout->addWidget(label);
+        btnLayout->addWidget(button);
+        wrapper->setLayout(btnLayout);
+
+        layout->addWidget(wrapper);
+        layout->setAlignment(wrapper, Qt::AlignHCenter);
         button->init(&videos.at(i));
     }
 

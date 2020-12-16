@@ -11,7 +11,7 @@
 #include <iostream>
 
 #include "player.h"
-#include "icons.h"
+#include "util.h"
 
 VideoControl::VideoControl(Player *player) {
     this->player = player;

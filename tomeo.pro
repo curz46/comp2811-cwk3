@@ -11,7 +11,7 @@ SOURCES += \
         player.cpp \
         video_control.cpp \
         add_video.cpp \
-        icons.cpp \
+        util.cpp \
         tomeo.cpp 
 
 HEADERS += \
@@ -19,7 +19,7 @@ HEADERS += \
     player.h \
     video_control.h \
     add_video.h \
-    icons.h
+    util.h
 
 RESOURCES += \
     resources.qrc

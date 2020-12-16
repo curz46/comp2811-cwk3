@@ -8,16 +8,14 @@
 #include <fstream>
 #include <iostream>
 
+#include "util.h"
+
 void AddVideo::clicked() {
     QString result = QFileDialog::getOpenFileName(this, "Choose Video", "/home/dylan", "Video Files (*.mp4, *.mov)");
     string filepath = result.toStdString();
     
     // get filename
-    string new_path = filepath;
-    size_t last_slash = new_path.find_last_of("\\/");
-    if (std::string::npos != last_slash)
-        new_path.erase(0, last_slash+1);
-    
+    string new_path = getFilename(filepath);
     new_path.insert(0, this->videosDir);
 
     std::ifstream src(filepath, std::ios::binary);

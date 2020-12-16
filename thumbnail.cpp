@@ -6,7 +6,7 @@
 
 #include "thumbnail.h"
 
-#include "icons.h"
+#include "util.h"
 
 void Thumbnail::init(VideoInfo* i) {
     if (i->icon != nullptr) {
