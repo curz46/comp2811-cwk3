@@ -32,6 +32,7 @@
 #include "video_control.h"
 #include "thumbnail.h"
 #include "add_video.h"
+#include "search.h"
 #include "util.h"
 
 using namespace std;
@@ -147,6 +148,10 @@ int main(int argc, char *argv[]) {
 
     buttonWidget->setLayout(layout);
     area->setWidget(buttonWidget);
+
+    Search *search = new Search(&buttons);
+    layout->addWidget(search);
+    layout->setAlignment(search, Qt::AlignHCenter);
 
     // add the 'add video' button to the top
     AddVideo *addVideo = new AddVideo(buttonWidget, videosDir);
