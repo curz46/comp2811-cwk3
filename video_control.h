@@ -20,11 +20,14 @@ private:
     QPushButton *playBtn;
     QProgressBar *bar;
     QLabel *time;
+
+    bool playing;
 public:
     VideoControl(Player *player);
 private slots:
     void updateDuration(qint64 duration);
     void updatePosition(qint64 position);
+    void togglePlayback();
 };
 
 #endif // VIDEO_CONTROL__H

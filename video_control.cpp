@@ -1,3 +1,4 @@
+
 #include "video_control.h"
 
 #include <QtGlobal>
@@ -5,6 +6,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QProgressBar>
 #include <QtWidgets/QLabel>
+#include <QMediaPlayer>
 
 #include <iostream>
 
@@ -40,6 +42,9 @@ VideoControl::VideoControl(Player *player) {
     connect(
         player, SIGNAL( positionChanged(qint64) ),
         this, SLOT( updatePosition(qint64) ));
+    connect(
+        this->playBtn, SIGNAL( pressed() ),
+        this, SLOT( togglePlayback() ));
 }
 
 void VideoControl::updateDuration(qint64 millis) {
@@ -56,7 +61,6 @@ void VideoControl::updatePosition(qint64 millis) {
     int elapsed_s = millis / 1000 - elapsed_m * 60;
 
     int duration = this->bar->maximum();
-    std::cout << duration << std::endl;
     int total_m = duration / 60;
     int total_s = duration - total_m * 60;
 
@@ -64,4 +68,14 @@ void VideoControl::updatePosition(qint64 millis) {
     // xx:xx / xx:xx 
     snprintf(buf, sizeof(buf), "%02d:%02d / %02d:%02d", elapsed_m, elapsed_s, total_m, total_s);
     this->time->setText(buf);
+}
+
+void VideoControl::togglePlayback() {
+    if (this->player->state() == QMediaPlayer::PlayingState) {
+        this->playBtn->setIcon(*this->playIcon);
+        this->player->pause();
+    } else {
+        this->playBtn->setIcon(*this->pauseIcon);
+        this->player->play();
+    }
 }
