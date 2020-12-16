@@ -23,33 +23,42 @@ public:
     }
 };
 
-class Thumbnail : public QPushButton {
+class Thumbnail : public QWidget {
     Q_OBJECT
 
 public:
+    QPushButton *btn;
+    QLabel *label;
     VideoInfo* info;
 
-    Thumbnail(QWidget *parent, Player *player) : QPushButton(parent) {
+    Thumbnail(QWidget *parent, Player *player) : QWidget(parent) {
+        QVBoxLayout *layout = new QVBoxLayout();
+
+        this->label = new QLabel("<loading>");
+        this->btn = new QPushButton();
+
         QSize size = QSize(200, 110);
-        this->setMinimumSize(size);
-        this->setMaximumSize(size);
-        this->setIconSize(size);
-        this->connect(
-                this, SIGNAL( clicked() ),
+        btn->setMinimumSize(size);
+        btn->setMaximumSize(size);
+        btn->setIconSize(size);
+        btn->connect(
+                btn, SIGNAL( clicked() ),
                 this, SLOT ( clicked() )); // if QPushButton clicked...then run clicked() below
-        this->connect(
+        btn->connect(
                 this, SIGNAL( jumpTo(VideoInfo*) ),
                 player, SLOT( jumpTo(VideoInfo*) ));
+
+        layout->addWidget(label);
+        layout->addWidget(btn);
+        this->setLayout(layout);
     }
 
     void init(VideoInfo* i);
 
 private slots:
     void clicked();
-
 signals:
     void jumpTo(VideoInfo*);
-
 };
 
 #endif //CW2_THE_BUTTON_H

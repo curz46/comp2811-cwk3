@@ -140,6 +140,7 @@ int main(int argc, char *argv[]) {
     area->setMaximumSize(200 + 60, QWIDGETSIZE_MAX);
     area->setWidgetResizable(true);
     area->setFrameStyle(QFrame::NoFrame);
+    area->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     QWidget *buttonWidget = new QWidget();
@@ -164,24 +165,16 @@ int main(int argc, char *argv[]) {
 
     // create a thumbnail for each video
     for (int i = 0; i < videos.size(); i++) {
-        QWidget *wrapper = new QWidget();
-        QVBoxLayout *btnLayout = new QVBoxLayout();
-        
         Thumbnail *button = new Thumbnail(buttonWidget, player);
         button->connect(button, SIGNAL(jumpTo(VideoInfo* )), player, SLOT (jumpTo(VideoInfo* ))); // when clicked, tell the player to play.
         buttons.push_back(button);
 
-        QLabel *label = new QLabel();
-        label->setText(*videos.at(i).title);
-
-        btnLayout->addWidget(label);
-        btnLayout->addWidget(button);
-        wrapper->setLayout(btnLayout);
-
-        layout->addWidget(wrapper);
-        layout->setAlignment(wrapper, Qt::AlignHCenter);
+        layout->addWidget(button);
+        layout->setAlignment(button, Qt::AlignHCenter);
         button->init(&videos.at(i));
     }
+
+    layout->addStretch();
 
     // tell the player what buttons and videos are available
     player->setContent(&buttons, & videos);

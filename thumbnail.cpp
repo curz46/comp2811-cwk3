@@ -9,12 +9,13 @@
 #include "util.h"
 
 void Thumbnail::init(VideoInfo* i) {
+    this->label->setText(*i->title);
     if (i->icon != nullptr) {
-        this->setIcon(*i->icon);
+        this->btn->setIcon(*i->icon);
     } else {
         QIcon *icon = createIcon(":/images/no-thumbnail.jpg");
         if (icon != nullptr)
-            this->setIcon(*icon);
+            this->btn->setIcon(*icon);
     }
     this->info = i;
 }
