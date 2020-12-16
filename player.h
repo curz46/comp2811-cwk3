@@ -39,7 +39,6 @@ public:
 
     // all buttons have been setup, store pointers here
     void setContent(vector<Thumbnail*>* b, vector<VideoInfo>* i);
-
 private slots:
 
     // change the image and video for one button every one second

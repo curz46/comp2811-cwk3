@@ -10,7 +10,10 @@
 class Player;
 
 class VideoControl : public QWidget {
+    Q_OBJECT
 private:
+    Player *player;
+
     QIcon *playIcon;
     QIcon *pauseIcon;
 
@@ -19,6 +22,9 @@ private:
     QLabel *time;
 public:
     VideoControl(Player *player);
+private slots:
+    void updateDuration(qint64 duration);
+    void updatePosition(qint64 position);
 };
 
 #endif // VIDEO_CONTROL__H
