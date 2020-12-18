@@ -1,3 +1,14 @@
+# Tomeo (`comp2811-cwk3`)
+
+Tomeo is a video player prototype for sports enthuasiasts. This repository
+hosts all four iterations for our `comp2811` group project (coursework 3). 
+
+| Group | Members                                                         |
+| ----- | --------------------------------------------------------------- |
+| `18`  | `sc19ab`, `ed18a2n`, `sc19d2c`, `sc19tgc`, `sc19aa`, `sc18ys`   |
+
+See the branches for each iteration (named `it-1`, `it-2`, etc.)
+
 ## Setup instructions
 
 This README contains instructions for UNIX, specifically ArchLinux. If you're using a different distribution you will need to find the equivalent packages.
