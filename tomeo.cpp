@@ -50,9 +50,9 @@ vector<VideoInfo> getInfoIn (string loc) {
 #if defined(_WIN32)
             if (f.contains(".wmv"))  { // windows
 #else
-            if (f.contains(".mp4") || f.contains("MOV"))  { // mac/linux
+            if (f.contains(".mp4") || f.contains("MOV")) { // mac/linux
 #endif
-
+            // get the title using substrings
             QString filepath = f.left( f .length() - 4);
             QString title = QString::fromStdString( getFilename(filepath.toStdString()) );
             QString thumb = filepath + ".png";
@@ -63,11 +63,15 @@ vector<VideoInfo> getInfoIn (string loc) {
             if (QFile(thumb).exists()) { // if a png thumbnail exists
                 QImageReader *imageReader = new QImageReader(thumb);
                 QImage sprite = imageReader->read(); // read the thumbnail
-                if (!sprite.isNull())
-                    icon = new QIcon(QPixmap::fromImage(sprite)); // voodoo to create an icon for the button
+                if (!sprite.isNull()) {
+                    // voodoo to create an icon for the button
+                    icon = new QIcon(QPixmap::fromImage(sprite)); 
+                }
             }
-            QUrl *url = new QUrl(QUrl::fromLocalFile( f )); // convert the file location to a generic url
-            out.push_back(VideoInfo( title, url , icon )); // add to the output list
+            // convert the file location to a generic url
+            QUrl *url = new QUrl(QUrl::fromLocalFile( f )); 
+            // add to the output list
+            out.push_back(VideoInfo( title, url , icon )); 
         }
     }
 
@@ -76,7 +80,6 @@ vector<VideoInfo> getInfoIn (string loc) {
 
 
 int main(int argc, char *argv[]) {
-
     // let's just check that Qt is operational first
     qDebug() << "Qt version: " << QT_VERSION_STR << endl;
 
@@ -113,9 +116,11 @@ int main(int argc, char *argv[]) {
 
     // the widget that will show the video
     QWidget *videoContainer = new QWidget();
+    // vertical layout for the video & title
     QVBoxLayout *videoLayout = new QVBoxLayout();
+    // create a label to display the title
     QLabel *videoLabel = new QLabel();
-    videoLabel->setText("hello world");
+    videoLabel->setText("<loading>");
     QVideoWidget *videoWidget = new QVideoWidget;
     videoLayout->addWidget(videoLabel);
     videoLayout->addWidget(videoWidget);
@@ -134,7 +139,7 @@ int main(int argc, char *argv[]) {
     VideoControl *control = new VideoControl(player);
     videoLayout->addWidget(control);
 
-    // a row of buttons
+    // create scroll area to list thumbnails
     QScrollArea *area = new QScrollArea();
     area->setMinimumSize(200 + 60, 0);
     area->setMaximumSize(200 + 60, QWIDGETSIZE_MAX);
@@ -156,6 +161,7 @@ int main(int argc, char *argv[]) {
 
     // add the 'add video' button to the top
     AddVideo *addVideo = new AddVideo(buttonWidget, videosDir);
+    // connect up button so the player handles add video request
     addVideo->connect(
         addVideo, SIGNAL( addVideo(VideoInfo*) ),
         player, SLOT( addVideo(VideoInfo*) ));
@@ -166,7 +172,10 @@ int main(int argc, char *argv[]) {
     // create a thumbnail for each video
     for (int i = 0; i < videos.size(); i++) {
         Thumbnail *button = new Thumbnail(buttonWidget, player);
-        button->connect(button, SIGNAL(jumpTo(VideoInfo* )), player, SLOT (jumpTo(VideoInfo* ))); // when clicked, tell the player to play.
+        // when clicked, tell the player to play
+        button->connect(
+            button, SIGNAL( jumpTo(VideoInfo*)),
+            player, SLOT ( jumpTo(VideoInfo* ))); 
         buttons.push_back(button);
 
         layout->addWidget(button);
@@ -174,6 +183,9 @@ int main(int argc, char *argv[]) {
         button->init(&videos.at(i));
     }
 
+    // so when there's not enough thumbnails to
+    // show a scrollbar, they are still placed
+    // at the top of the window
     layout->addStretch();
 
     // tell the player what buttons and videos are available

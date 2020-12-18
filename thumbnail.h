@@ -13,7 +13,7 @@
 class VideoInfo {
 
 public:
-    QString* title;
+    QString* title; 
     QUrl* url; // video file to play
     QIcon* icon; // icon to display
 
@@ -41,9 +41,11 @@ public:
         btn->setMinimumSize(size);
         btn->setMaximumSize(size);
         btn->setIconSize(size);
+        // handle click signal 
         btn->connect(
                 btn, SIGNAL( clicked() ),
-                this, SLOT ( clicked() )); // if QPushButton clicked...then run clicked() below
+                this, SLOT ( clicked() ));
+        // forward jumpTo to player
         btn->connect(
                 this, SIGNAL( jumpTo(VideoInfo*) ),
                 player, SLOT( jumpTo(VideoInfo*) ));

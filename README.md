@@ -31,3 +31,6 @@ qmake ..
 make -B
 ./tomeo
 ```
+
+Note that there is also a `test.sh` script to make rapid testing more convenient. This will fully build the entire project & run it, giving the `videos` directory
+in the root of this project as an argument.

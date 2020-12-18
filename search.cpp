@@ -15,6 +15,7 @@ Search::Search(std::vector<Thumbnail*> *buttons) {
     this->setPlaceholderText("Type here to filter videos");
     this->setTextMargins(5, 5, 5, 5);
 
+    // handle text changed (user typed something)
     connect(
         this, SIGNAL( textChanged(const QString&) ),
         this, SLOT( textChanged(const QString&) ));
@@ -23,6 +24,7 @@ Search::Search(std::vector<Thumbnail*> *buttons) {
 void Search::textChanged(const QString& text) {
     string filter = text.toStdString();
 
+    // iterate through each button and look at the title
     std::vector<Thumbnail*>::iterator ptr;
     for (ptr = this->buttons->begin(); ptr < this->buttons->end(); ptr++) {
         Thumbnail *button = *ptr;
@@ -30,8 +32,9 @@ void Search::textChanged(const QString& text) {
         QString *title = button->info->title;
         string str     = title->toStdString();
 
+        // if the title contains our filter we want to make it visible
+        // otherwise hide it
         int i = str.find(filter);
-        // visible if found in string
         // i.e. show video if the title contains our filter text
         button->setVisible(i != std::string::npos);
     }

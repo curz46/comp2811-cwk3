@@ -14,18 +14,17 @@ Player::Player(QLayout *buttonLayout) : QMediaPlayer(NULL) {
     this->buttonLayout = buttonLayout;
 
     setVolume(0); // be slightly less annoying
-    connect (this, SIGNAL (stateChanged(QMediaPlayer::State)), this, SLOT (playStateChanged(QMediaPlayer::State)) );
-
-    // mTimer = new QTimer(NULL);
-    // mTimer->setInterval(1000); // 1000ms is one second between ...
-    // mTimer->start();
-    // connect( mTimer, SIGNAL (timeout()), SLOT ( shuffle() ) ); // ...running shuffle method
+    connect(
+        this, SIGNAL( stateChanged(QMediaPlayer::State) ),
+        this, SLOT( playStateChanged(QMediaPlayer::State) ));
 }
 
 void Player::setVideoLabel(QLabel *label) {
     this->label = label;
 }
 
+// handle when 'add video' button tells us to add
+// a video info 
 void Player::addVideo(VideoInfo *info) {
     Thumbnail *thumbnail = new Thumbnail(nullptr, this);
     thumbnail->init(info);
@@ -39,15 +38,8 @@ void Player::addVideo(VideoInfo *info) {
 void Player::setContent(std::vector<Thumbnail*>* b, std::vector<VideoInfo>* i) {
     buttons = b;
     infos = i;
-    jumpTo(buttons -> at(0) -> info);
+    jumpTo(buttons->at(0)->info);
 }
-
-// // change the image and video for one button every one second
-// void Player::shuffle() {
-//     VideoInfo* i = & infos -> at (rand() % infos->size() );
-// //        setMedia(*i->url);
-//     buttons -> at( updateCount++ % buttons->size() ) -> init( i );
-// }
 
 void Player::playStateChanged (QMediaPlayer::State ms) {
     // update video label to current video

@@ -14,14 +14,14 @@ class VideoControl : public QWidget {
 private:
     Player *player;
 
+    // icons to swap out play/pause button
     QIcon *playIcon;
     QIcon *pauseIcon;
 
+    // Qt components
     QPushButton *playBtn;
     QProgressBar *bar;
     QLabel *time;
-
-    bool playing;
 public:
     VideoControl(Player *player);
 private slots:
