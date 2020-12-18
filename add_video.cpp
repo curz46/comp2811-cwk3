@@ -9,7 +9,7 @@
 #include <iostream>
 
 void AddVideo::clicked() {
-    QString result = QFileDialog::getOpenFileName(this, "Choose Video", "/home/dylan", "Video Files (*.mp4, *.mov)");
+    QString result = QFileDialog::getOpenFileName(this, "Choose Video", "/home/dylan", "Video Files (*.mp4, *.mov, *.wmv)");
     string filepath = result.toStdString();
     
     // get filename
