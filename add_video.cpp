@@ -11,24 +11,26 @@
 #include "util.h"
 
 void AddVideo::clicked() {
-    QString result = QFileDialog::getOpenFileName(this, "Choose Video", "/home/dylan", "Video Files (*.mp4, *.mov)");
+    QString result = QFileDialog::getOpenFileName(
+            this, "Choose Video", "", "Video Files (*.mp4, *.mov, *.wmv)");
     string filepath = result.toStdString();
     
-    // get filename
+    // new_path should be the path to a new file
+    // in our videos directory with the same
+    // filename as the file the user chose
     string new_path = getFilename(filepath);
     new_path.insert(0, this->videosDir);
 
     std::ifstream src(filepath, std::ios::binary);
     std::ofstream dst(new_path, std::ios::binary);
     
+    // copy the source file to the destination path
     dst << src.rdbuf();
-
-    std::cout << new_path << std::endl;
 
     QString qpath = QString::fromStdString(new_path);
 
     QUrl *url = new QUrl(QUrl::fromLocalFile(qpath));
-    // copy the file to the images directory
     
+    // tell the player to add the video
     emit addVideo(new VideoInfo(qpath, url, nullptr));
 }

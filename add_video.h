@@ -16,6 +16,8 @@ private:
 public:
     AddVideo(QWidget *parent, string videosDir) : QPushButton(parent) {
         this->videosDir = videosDir;
+        // make sure this directory ends with a forward slash
+        // so we can append to it the filename without problems
         if (this->videosDir.back() != '/')
             this->videosDir.append("/");
 
@@ -24,6 +26,7 @@ public:
         this->setMaximumSize(size);
         this->setText("Add Video");
 
+        // handle click 
         connect(
             this, SIGNAL( clicked() ),
             this, SLOT( clicked() ));
